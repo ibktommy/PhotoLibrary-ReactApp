@@ -41,8 +41,6 @@ function App() {
     console.log(e)
   }
 
-
-
   return (
     <main>
       <section className="search">
@@ -53,12 +51,15 @@ function App() {
           </button>
         </form>
       </section>
+
       <section className='photos'>
         <div className="photos-center">
           {photos.map((imageProps, index) => {
             return <Photo key={index} {...imageProps}/>
           })}
         </div>
+
+        {isLoading && <h2 className='loading'>Loading...</h2>}
       </section>
     </main>
   )
