@@ -53,6 +53,13 @@ function App() {
           </button>
         </form>
       </section>
+      <section className='photos'>
+        <div className="photos-center">
+          {photos.map((imageProps, index) => {
+            return <Photo key={index} {...imageProps}/>
+          })}
+        </div>
+      </section>
     </main>
   )
 }
