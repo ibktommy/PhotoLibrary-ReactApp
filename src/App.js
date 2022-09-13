@@ -71,6 +71,11 @@ function App() {
   // Function To Handle Form Submission
   const formSubmitHandler = (e) => {
     e.preventDefault()
+
+    if (!searchTerm) return
+    if (pageNumber === 1) {
+      fetchPhotos()
+    }
     setPageNumber(1)
   }
 
