@@ -149,6 +149,7 @@ Stock Photos
 }
 .form-input {
   width: 100%;
+  outline: none;
 }
 .form-input,
 .submit-btn {
@@ -166,6 +167,10 @@ Stock Photos
 }
 .form-input::placeholder {
   color: var(--clr-grey-5);
+}
+
+.submit-btn {
+  cursor: pointer;
 }
 .photos {
   padding: 5rem 0;

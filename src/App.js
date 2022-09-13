@@ -34,7 +34,27 @@ function App() {
   useEffect(() => {
     fetchPhotos()
   }, [])
-  return <h2>stock photos starter</h2>
+
+  // Function To Handle Form Submission
+  const formSubmitHandler = (e) => {
+    e.preventDefault()
+    console.log(e)
+  }
+
+
+
+  return (
+    <main>
+      <section className="search">
+        <form className="search-form">
+          <input type="text" placeholder='search' className='form-input' />
+          <button type='submit' className='submit-btn' onClick={formSubmitHandler}>
+            <FaSearch />
+          </button>
+        </form>
+      </section>
+    </main>
+  )
 }
 
 export default App
