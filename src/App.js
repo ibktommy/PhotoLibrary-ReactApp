@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Photo from './component/Photo'
 import { FaSearch } from 'react-icons/fa'
 
@@ -14,6 +14,9 @@ function App() {
   const [photos, setPhotos] = useState([])
   const [pageNumber, setPageNumber] = useState(1)
   const [searchTerm, setSearchTerm] = useState('')
+
+  // Setting useRef
+  const rendered = useRef(false)
 
   // Setting Up FUnction to Fetch Photos Data
   const fetchPhotos = async () => {
@@ -56,10 +59,19 @@ function App() {
     fetchPhotos()
   }, [pageNumber])
 
+  // Setting up useEffect-Hook that will run on renders after the first-render of the App
+  useEffect(() => {
+    if (!rendered.current) {
+      rendered.current = true
+      return
+    }
+    console.log('other renders')
+  }, [])
+
   // Function To Handle Form Submission
   const formSubmitHandler = (e) => {
     e.preventDefault()
-    fetchPhotos()
+    setPageNumber(1)
   }
 
   return (
