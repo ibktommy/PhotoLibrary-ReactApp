@@ -12,18 +12,24 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
 
   const [photos, setPhotos] = useState([])
+  const [pageNumber, setPageNumber] = useState(1)
 
   // Setting Up FUnction to Fetch Photos Data
   const fetchPhotos = async () => {
     setIsLoading(true)
     let url;
-    url = `${mainUrl}${clientID}`
+    const perPage = `&page=${pageNumber}`
+    url = `${mainUrl}${clientID}${perPage}`
+
     try {
       const response = await fetch(url)
       const data = await response.json()
       console.log(data)
-      setPhotos(data)
+      setPhotos((prevPhotos) => {
+        return [...prevPhotos, ...data]
+      })
       setIsLoading(false)
+
     } catch (error) {
       setIsLoading(false)
       console.log(error.message)
@@ -33,20 +39,22 @@ function App() {
   // Setting Up useEffect Hook to Call The FetchPhotos function
   useEffect(() => {
     fetchPhotos()
-  }, [])
+  }, [pageNumber])
 
   // Setting scroll Event on the Webpage
   useEffect(() => {
     const scrollEvent = window.addEventListener('scroll', () => {
       if (
-        !isLoading && window.innerHeight + window.scrollY >= document.body.scrollHeight - 50
+        !isLoading && window.innerHeight + window.scrollY >= document.body.scrollHeight - 2
       ) {
-        console.log('Reached the Bottom')
+        setPageNumber((prevPageNumber) => {
+          return prevPageNumber + 1
+        })
       }
     })
 
     return () => window.removeEventListener('scroll', scrollEvent)
-  }, [])
+  }, [isLoading])
 
   // Function To Handle Form Submission
   const formSubmitHandler = (e) => {
