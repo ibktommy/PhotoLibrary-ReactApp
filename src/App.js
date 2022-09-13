@@ -34,8 +34,11 @@ function App() {
       const data = await response.json()
       console.log(data)
       setPhotos((prevPhotos) => {
-        if (searchTerm) {
-          return [...prevPhotos, ...data.results]
+        if (searchTerm && pageNumber === 1) {
+          return data.results
+        }
+        else if (searchTerm) {
+          return data.results
         } else {
           return [...prevPhotos, ...data]
         }
@@ -52,21 +55,6 @@ function App() {
   useEffect(() => {
     fetchPhotos()
   }, [pageNumber])
-
-  // Setting scroll Event on the Webpage
-  useEffect(() => {
-    const scrollEvent = window.addEventListener('scroll', () => {
-      if (
-        !isLoading && window.innerHeight + window.scrollY >= document.body.scrollHeight - 2
-      ) {
-        setPageNumber((prevPageNumber) => {
-          return prevPageNumber + 1
-        })
-      }
-    })
-
-    return () => window.removeEventListener('scroll', scrollEvent)
-  }, [isLoading])
 
   // Function To Handle Form Submission
   const formSubmitHandler = (e) => {
