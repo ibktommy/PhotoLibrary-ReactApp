@@ -14,6 +14,7 @@ function App() {
   const [photos, setPhotos] = useState([])
   const [pageNumber, setPageNumber] = useState(1)
   const [searchTerm, setSearchTerm] = useState('')
+  const [newPhotos, setNewPhotos] = useState(false)
 
   // Setting useRef
   const rendered = useRef(false)
@@ -46,6 +47,7 @@ function App() {
           return [...prevPhotos, ...data]
         }
       })
+      setNewPhotos(false)
       setIsLoading(false)
 
     } catch (error) {
@@ -65,7 +67,25 @@ function App() {
       rendered.current = true
       return
     }
-    console.log('other renders')
+    if(!newPhotos) return
+    if(isLoading) return
+
+    setPageNumber((prevPageNumber) => {
+      return prevPageNumber + 1
+    })
+  }, [newPhotos])
+
+  // Scroll Event Function
+  const scrollEvent = () => {
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 2) {
+      setNewPhotos(true)
+    }
+  }
+
+  // Setting up useEffect-Hook to run the scroll-event-functionality
+  useEffect(() => {
+    window.addEventListener('scroll', scrollEvent)
+    return () => window.removeEventListener('scroll', scrollEvent)
   }, [])
 
   // Function To Handle Form Submission
@@ -75,6 +95,7 @@ function App() {
     if (!searchTerm) return
     if (pageNumber === 1) {
       fetchPhotos()
+      return
     }
     setPageNumber(1)
   }
