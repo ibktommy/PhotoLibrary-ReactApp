@@ -35,6 +35,19 @@ function App() {
     fetchPhotos()
   }, [])
 
+  // Setting scroll Event on the Webpage
+  useEffect(() => {
+    const scrollEvent = window.addEventListener('scroll', () => {
+      if (
+        !isLoading && window.innerHeight + window.scrollY >= document.body.scrollHeight - 50
+      ) {
+        console.log('Reached the Bottom')
+      }
+    })
+
+    return () => window.removeEventListener('scroll', scrollEvent)
+  }, [])
+
   // Function To Handle Form Submission
   const formSubmitHandler = (e) => {
     e.preventDefault()
