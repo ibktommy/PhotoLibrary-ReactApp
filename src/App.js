@@ -13,20 +13,32 @@ function App() {
 
   const [photos, setPhotos] = useState([])
   const [pageNumber, setPageNumber] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
 
   // Setting Up FUnction to Fetch Photos Data
   const fetchPhotos = async () => {
     setIsLoading(true)
     let url;
     const perPage = `&page=${pageNumber}`
-    url = `${mainUrl}${clientID}${perPage}`
+    const searchQuery = `&query=${searchTerm}`
+
+    if (searchTerm) {
+      url = `${searchUrl}${clientID}${perPage}${searchQuery}`
+    } else {
+      url = `${mainUrl}${clientID}${perPage}`
+    }
+
 
     try {
       const response = await fetch(url)
       const data = await response.json()
       console.log(data)
       setPhotos((prevPhotos) => {
-        return [...prevPhotos, ...data]
+        if (searchTerm) {
+          return [...prevPhotos, ...data.results]
+        } else {
+          return [...prevPhotos, ...data]
+        }
       })
       setIsLoading(false)
 
@@ -59,14 +71,14 @@ function App() {
   // Function To Handle Form Submission
   const formSubmitHandler = (e) => {
     e.preventDefault()
-    console.log(e)
+    fetchPhotos()
   }
 
   return (
     <main>
       <section className="search">
         <form className="search-form">
-          <input type="text" placeholder='search' className='form-input' />
+          <input type="text" placeholder='search' className='form-input' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           <button type='submit' className='submit-btn' onClick={formSubmitHandler}>
             <FaSearch />
           </button>
@@ -76,7 +88,7 @@ function App() {
       <section className='photos'>
         <div className="photos-center">
           {photos.map((imageProps, index) => {
-            return <Photo key={index} {...imageProps}/>
+            return <Photo key={index} {...imageProps} />
           })}
         </div>
 
